@@ -7,7 +7,7 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-dddddddd
+
 CREATE
 procedure       [dbo].[WMS_DOWNSTRATEGYDELETE]
 --库存盘点 删除存储过程
