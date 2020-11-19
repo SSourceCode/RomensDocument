@@ -10,9 +10,9 @@ GO
 
 CREATE
 procedure       [dbo].[WMS_DOWNSTRATEGYDELETE]
---¿â´æÅÌµã É¾³ı´æ´¢¹ı³Ì
+--åº“å­˜ç›˜ç‚¹ åˆ é™¤å­˜å‚¨è¿‡ç¨‹
 --2014/3/13
---ĞíÓÂÖÇ×ªF4ÃÅµê°æ
+--è®¸å‹‡æ™ºè½¬F4é—¨åº—ç‰ˆ
 (
   @BillGuid nvarchar(100) ,
   @BillTypeGuid nvarchar(100) ,
@@ -26,7 +26,7 @@ BEGIN
    SELECT @count = ISNULL(ISAUDITING,0) FROM WMS_DOWNSTRATEGY WHERE  GUID = @BillGuid;
    IF @count <> 0 
    BEGIN
-      Set @ReturnMsg = '¸Ã²ßÂÔÒÑÉóºË,²»ÄÜÉ¾³ı!' ;
+      Set @ReturnMsg = 'è¯¥ç­–ç•¥å·²å®¡æ ¸,ä¸èƒ½åˆ é™¤!' ;
       Set @ReturnValue = -1 ;
       Return;
    END;
@@ -34,11 +34,11 @@ BEGIN
   Begin Tran
    DELETE WMS_DOWNSTRATEGY  WHERE GUID = @BillGuid and IsNull(ISAUDITING,0)=0;
    DELETE WMS_DOWNSTRATEGYDETAIL  WHERE mainguid = @BillGuid ;
-   ----------É¾³ıÅÅĞò
+   ----------åˆ é™¤æ’åº
    Delete from WMS_GOODSPLACESORT where BILLTEMPLATEGUID='10051508008' and mainguid=@Billguid;
    If @@Error<>0 
 	Begin
-	 Set @ReturnMsg = 'É¾³ıÊ§°Ü'
+	 Set @ReturnMsg = 'åˆ é™¤å¤±è´¥'
 	 Goto SQLErr1
 	End
   Commit Tran
