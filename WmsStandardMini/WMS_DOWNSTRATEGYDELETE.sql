@@ -9,10 +9,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE
-procedure       [dbo].[WMS_DOWNSTRATEGYDELETE]
---库存盘点 删除存储过程
---2014/3/13
---许勇智转F4门店版
+procedure [dbo].[WMS_DOWNSTRATEGYDELETE]
 (
   @BillGuid nvarchar(100) ,
   @BillTypeGuid nvarchar(100) ,
