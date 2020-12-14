@@ -68,3 +68,8 @@ insert into DataQueryDefine select * from OPENDATASOURCE('SQLOLEDB','Data Source
 
 update DATAQUERYDEFINE  set selectsql = upper(Cast(selectsql as varchar(8000))) 
 WHERE DataQueryType like '%WMS-PDA'
+
+
+-- 是否集中拣货标志
+insert into SystemProfile (guid, moduleid, sectionname, keyname, keyvalue, keydescription, systemtype, forder)
+values(newid(),'1000','WMS-PDA','IsTaskGroup',0,'PDA是否启用集中拣货:0不启用1启用',0,30)

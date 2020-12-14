@@ -347,6 +347,7 @@ CREATE TABLE [dbo].[TKDBJL](
 	[DCKH] [varchar](50) NULL,
 	[HH] [varchar](50) NULL,
 	[PH] [varchar](50) NULL,
+	[SL] DECIMAL(18,6) 0,
 	[DH] [varchar](50) NULL,
 	[DBRQ] [datetime] NULL,
 	[USERGUID] [varchar](50) NULL,
