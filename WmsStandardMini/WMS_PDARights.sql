@@ -1,17 +1,8 @@
-GO
-
-/****** Object:  StoredProcedure [dbo].[WMS_PDARights]    Script Date: 2020/11/18 11:34:24 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 CREATE Proc [dbo].[WMS_PDARights]
 (
 @OperatorCode varchar(50),
-@ReturnMsg varchar(50) output ,
-@RightModel varchar(50) output ,
+@ReturnMsg varchar(2000) output ,
+@RightModel varchar(2000) output ,
 @ReturnValue int output
 )
 
@@ -27,11 +18,11 @@ Begin
 	Select @OperatorGuid = guid From operators where code = UPPER(@OperatorCode);
 	If @OperatorGuid IS NULL
 		Begin
-			Set @ReturnMsg = '获取操作人员编号失败！';		
+			Set @ReturnMsg = '获取操作人员编号失败！';
 			Set @ReturnValue = -1;
-			Return;	
+			Return;
 		End;
-	Set @RightModelGuid =  '00000002';
+	Set @RightModelGuid =  '6d66d794-6881-49a2-9347-4a5064502369';
 	Select @rightinfo = rightinfo2 From rightmodel where guid = @RightModelGuid;
 	Set @COUNT = 0;
 	Select  @COUNT =COUNT(1) From rights WHERE rightmodelguid=@RightModelGuid AND OperatorGuid=@OperatorGuid;
@@ -40,7 +31,7 @@ Begin
 	  Select @RightValue = RightValue2 From rights where rightmodelguid=@RightModelGuid and OperatorGuid=@OperatorGuid;
       Select @RightModel = STUFF( (Select ','+ modelname From (Select ch as modelname,row_number() over(order by (Select 0)) as xuhao From fsplit(@rightinfo,','))a1
       inner join (Select ch as rightname,row_number() over(order by (Select 0)) as xuhao From  fsplit(@RightValue,','))a2 on a1.xuhao = a2.xuhao where a2.rightname = 1 FOR XML PATH('')),1,1,'')
-	  If @@Error<>0 
+	  If @@Error<>0
 		Begin
 			Set @ReturnMsg='获取权限列表失败！'
 			Set @ReturnValue = -1;
@@ -49,7 +40,7 @@ Begin
 	  If @RightModel IS NULL
        Begin
 			Set @RightModel = '';
-			Set @ReturnMsg = '';		
+			Set @ReturnMsg = '';
 			Set @ReturnValue = 0;
 			Return;
 		End
@@ -62,21 +53,21 @@ Begin
 
 	If @COUNT > 0
 	Begin
-	declare my_cursor cursor for    
+	declare my_cursor cursor for
 	select GroupGuid from operatorGroupmember where Operatorguid=@OperatorGuid
 	open my_cursor
-	declare   @GroupGuid varchar(50)               
-	fetch next from my_cursor into @GroupGuid  
+	declare   @GroupGuid varchar(50)
+	fetch next from my_cursor into @GroupGuid
 	while @@FETCH_STATUS=0
 	begin
 	set @COUNT = 0;
     select @COUNT =COUNT(1) from rightgroup where OperatorGroupGuid=@GroupGuid and rightmodelguid=@RightModelGuid;
-	If @COUNT = 1 
+	If @COUNT = 1
 	Begin
 	  select @RightValue = rightvalue2  from rightgroup where OperatorGroupGuid=@GroupGuid and rightmodelguid=@RightModelGuid;
 	  select @RightModeltemp = (select ','+ modelname from (select ch as modelname,row_number() over(order by (Select 0)) as xuhao from fsplit(@rightinfo,','))a1
                 inner join (select ch as rightname,row_number() over(order by (Select 0)) as xuhao from fsplit(@RightValue,','))a2 on a1.xuhao = a2.xuhao where a2.rightname = 1);
-	   If @@Error<>0 
+	   If @@Error<>0
 		Begin
 			Set @ReturnMsg='获取权限列表失败！'
 			Set @ReturnValue = -1;
@@ -95,23 +86,11 @@ Begin
 	end--关闭释放游标
 	close my_cursor
 	deallocate my_cursor
-
-
-
-
 	End
-
-
-
-
-
-
     Set @ReturnMsg = '当前人员没有任何权限' ;
     Set @ReturnValue = -1 ;
     Return;
 Return;
 End
-
-GO
-
+go
 
