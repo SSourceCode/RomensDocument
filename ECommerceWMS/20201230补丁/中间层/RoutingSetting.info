@@ -1,0 +1,4 @@
+﻿EBInterface|ERP.Facade.EBInterface.Facade,ERP.Facade.EBInterface
+EB_ADDPremiums|G3ERP.Facade.EB_ADDPremiums.Facade,G3ERP.Facade.EB_ADDPremiums
+EB_BuySellNotesChange|G3ERP.Facade.EBBuySellNotesChange.Facade,G3ERP.Facade.EBBuySellNotesChange
+EB_CheckLog|G3ERP.Facade.EB_LogSelect.Facade,G3ERP.Facade.EB_LogSelect
