@@ -30,7 +30,12 @@ insert into DataQueryDefine select * from OPENDATASOURCE('SQLOLEDB','Data Source
 -- 是否集中拣货标志
 insert into SystemProfile (guid, moduleid, sectionname, keyname, keyvalue, keydescription, systemtype, forder)
 values(newid(),'1000','WMS-PDA','IsTaskGroup',0,'PDA是否启用集中拣货:0不启用1启用',0,30)
-insert into rightmodel Select * From OPENDATASOURCE('SQLOLEDB','Data Source=58.56.178.146,11433;User ID=sa;Password=romens@technology1').F4ERP.dbo.rightmodel where guid = '6d66d794-6881-49a2-9347-4a5064502369';
+
+--TOKEN
+insert into  APPAPIMANAGER SELECT  * FROM OPENDATASOURCE('SQLOLEDB','Data Source=sjjcomeon.vicp.cc,37297;User ID=sa;Password=Romens@1').EBWMS.dbo.APPAPIMANAGER where APPID = 'RomensWMS'
+
+--权限
+ INSERT INTO rightmodel SELECT * FROM OPENDATASOURCE('SQLOLEDB','Data Source=39.98.130.121,1437;User ID=wms;Password=romens@1').F4WMS.dbo.rightmodel where guid = '6d66d794-6881-49a2-9347-4a5064502369';
 
 
 
