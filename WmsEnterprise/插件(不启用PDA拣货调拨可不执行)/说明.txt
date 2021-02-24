@@ -1,0 +1,3 @@
+ERP.Facade.WMS_Sort --策略排序
+ERP.BILL.WMS_BOXNO --复核箱号
+Romens.Common.Win -- 平台DLL如果策略排序插件不报错可以不替换

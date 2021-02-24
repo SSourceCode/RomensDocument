@@ -1,0 +1,10 @@
+	UPDATE A SET A.ISSTATUS =1 FROM WMS_VESSEL A INNER JOIN (SELECT DISTINCT WMSRECORDSTATUS AS CODE  FROM  FAHUO WHERE LSH = @BillGuid  ) B ON B.CODE = A.CODE
+	IF @@ERROR <> 0
+	BEGIN
+		set @ReturnMsg = '更新箱号可用状态失败!' 
+        GOTO SQLErr1
+	END
+
+
+
+--存储过程名为：SellOutAccounts

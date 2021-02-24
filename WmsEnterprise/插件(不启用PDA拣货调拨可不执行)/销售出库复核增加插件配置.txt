@@ -1,0 +1,1 @@
+1.0.0.0	0	1001	医药版	ERP.BILL.WMS_BOXNO.dll	ERP.BILL.WMS_BOXNO.Win1	True	AfterFormLoad()
