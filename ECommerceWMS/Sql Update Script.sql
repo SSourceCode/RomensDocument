@@ -1,0 +1,1 @@
+alter table EB_TRADE_SELLOUT add IsAppointment bit;

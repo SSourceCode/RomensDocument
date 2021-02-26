@@ -1,42 +1,39 @@
-GO
-/****** Object:  StoredProcedure [dbo].[WMS_WORKGROUPUNAUDITING]    Script Date: 2020/11/18 10:33:17 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROC          [dbo].[WMS_WORKGROUPUNAUDITING]
+
+create or replace
+PROCEDURE WMS_WORKGROUPUNAUDITING
 (
-  @BillGuid VARCHAR(50) ,
-  @BillTypeGuid VARCHAR(50),
-  @OperatorGuid VARCHAR(50) ,
-  @ReturnMsg varchar(200) OutPut,
-  @ReturnValue int OutPut	-- 返回提示或错误信息 
+  v_BillGuid-- 待删除的表单单据GUID
+   IN VARCHAR2 DEFAULT NULL ,
+  v_BillTypeGuid-- 待删除的表单GUID
+   IN VARCHAR2 DEFAULT NULL ,
+  v_OperatorGuid-- 当前操作人员GUID
+   IN VARCHAR2 DEFAULT NULL ,
+  v_ReturnMsg-- 返回提示或错误信息
+   OUT VARCHAR2,
+  v_ReturnValue-- 返回提示或错误信息
+   OUT NUMBER
 )
 AS
-declare @count int;
+    V_count NUMBER(10) :=0;
 BEGIN
-   set @count = 0;
-   select @count = count(*)  from wms_Workgroup WHERE  GUID = @BillGuid and IsNull(IsAuditing,0)=0;
-   if @count>0
-   begin
-     set @ReturnMsg = '单据还未审核，无需反审！' ;
-     set @ReturnValue = -1 ;
-     RETURN;
-   end;
-   Begin Tran
-   update wms_Workgroup  set ISAUDITING=0,AUDITINGGUID='',AUDITINGDATE=NULL
-   WHERE GUID = @BillGuid and IsNull(IsAuditing,0)=1;
-    If @@Error<>0 
+   select  count(*) INTO V_count  from wms_Workgroup WHERE  GUID = v_BillGuid and NVL(IsAuditing,0) = 0;
+   if V_count>0 THEN
+       begin
+         V_ReturnMsg := '单据还未审核，无需反审！' ;
+         V_ReturnValue := -1 ;
+         RETURN;
+       end;
+   END IF;
    Begin
-	Select @ReturnMsg = '反审失败！'
-	Goto SQLErr1
+    update wms_Workgroup  set ISAUDITING=0,AUDITINGGUID='',AUDITINGDATE=NULL WHERE GUID = V_BillGuid and NVL(IsAuditing,0)=1;
+    EXCEPTION  WHEN OTHERS THEN
+            v_ReturnMsg:='反审失败!';
+            v_ReturnValue := 2;
+            ROLLBACK;
+            RETURN;
    End;
-   Commit Tran
-	SET @ReturnMsg=''
-	SET @ReturnValue=0
+   Commit;
+	V_ReturnMsg := ' ' ;
+    V_ReturnValue := 0 ;
 	Return;
-	SQLErr1:
-	RollBack Transaction
-	Set @ReturnValue=-1
-	Return;
-	END;
+END;
